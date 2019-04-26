@@ -1,0 +1,16 @@
+//list
+
+{
+  employeelist {
+    fullName
+ }
+}
+
+
+//employee_by_id
+
+{
+  employee(id:"5c82291bf863b2449ce3b245") {
+    city
+ }
+}
