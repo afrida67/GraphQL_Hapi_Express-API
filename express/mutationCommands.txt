@@ -1,0 +1,14 @@
+//add
+mutation {
+  addEmployee(fullName:"aaa", email:"a@gmail.com", mobile:"1233", city:"rangpur") {
+    fullName
+    email
+  }
+}
+//delete
+
+mutation {
+   deleteEmployee(id:"5cc2f9ef72955363d2b3bc6d") {
+    fullName
+  }
+}

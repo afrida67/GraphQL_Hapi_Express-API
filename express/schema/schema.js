@@ -15,7 +15,7 @@ const EmployeeType = new GraphQLObjectType({
         id: { type: GraphQLString },
         fullName: { type: GraphQLString },
         email: { type: GraphQLString },
-        phone: {type: GraphQLString },
+        mobile: {type: GraphQLString },
         city: {type: GraphQLString }
     })
 });
@@ -39,6 +39,42 @@ const RootQuery = new GraphQLObjectType({
     }
 });
 
+
+const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        addEmployee: {
+            type: EmployeeType,
+            args: {
+                fullName: { type: GraphQLString },
+                email: { type: GraphQLString },
+                mobile: {type: GraphQLString },
+                city: {type: GraphQLString }
+            },
+            resolve(parent, args){
+                let employee = new Employee({
+                    fullName: args.fullName,
+                    email: args.email,
+                    mobile: args.mobile,
+                    city: args.city
+                });
+                return employee.save();
+            }
+        },
+        deleteEmployee: {
+            type: EmployeeType,
+            args: {
+                id: { type: GraphQLString },
+            },
+            resolve(parent, args){
+               return Employee.findByIdAndDelete(args.id);
+            }
+        },
+        
+    }
+});
+
 module.exports = new GraphQLSchema({
     query: RootQuery,
+    mutation: Mutation
 });
