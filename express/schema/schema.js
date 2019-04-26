@@ -3,7 +3,7 @@ const Employee = require('../models/employeeSchema');
 const {
     GraphQLObjectType,
     GraphQLString,
-    GraphQLInt,
+    GraphQLNonNull,
     GraphQLSchema,
     GraphQLList,
 } = require('graphql');
@@ -70,7 +70,24 @@ const Mutation = new GraphQLObjectType({
                return Employee.findByIdAndDelete(args.id);
             }
         },
-        
+        updateEmployee: {
+            type: EmployeeType,
+            args: {
+                id: { type: GraphQLString },
+                fullName: { type: new GraphQLNonNull(GraphQLString) },
+                email: { type: new GraphQLNonNull(GraphQLString) },
+                mobile: { type: new GraphQLNonNull(GraphQLString)},
+                city: { type: new GraphQLNonNull(GraphQLString)},
+            },
+            resolve(parent, args){
+               return Employee.findByIdAndUpdate(args.id, {
+                fullName: args.fullName,
+                email: args.email,
+                mobile: args.mobile,
+                city: args.city
+               }, {useFindAndModify: false});
+            } 
+        },
     }
 });
 

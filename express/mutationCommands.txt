@@ -12,3 +12,11 @@ mutation {
     fullName
   }
 }
+
+//update
+
+mutation {
+  updateEmployee(id:"5cc2f98c16720362a54705e8",fullName:"aaa", email:"a@gmail.com", mobile:"1233", city:"rangpur") {
+    city
+  }
+}
