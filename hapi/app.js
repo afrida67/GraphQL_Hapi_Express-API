@@ -1,6 +1,6 @@
 const hapi = require('hapi');
 
-const { ApolloServer, gql } = require('apollo-server-hapi');
+const { ApolloServer } = require('apollo-server-hapi');
 
 const graphqlSchema = require('./graphqlSchema/schema');
 
@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost:27017/employeeDB', { useNewUrlParser: true
 });
 
 const init = async () => {
-    try{
+    try {
       const server = new ApolloServer({  
         schema: graphqlSchema 
     });
@@ -35,4 +35,5 @@ const init = async () => {
       process.exit(1);
   }
 };
+
 init();
