@@ -6,20 +6,19 @@ const graphqlSchema = require('./graphqlSchema/schema');
 
 const mongoose = require('mongoose');
 
-
 mongoose.connect('mongodb://localhost:27017/employeeDB', { useNewUrlParser: true }, (err) => {
-    if (!err) { console.log('MongoDB Connection Succeeded for GraphQL...') }
+    if (!err) { console.log('MongoDB Connection Succeeded for GraphQL...')}
     else { console.log(`Error in DB connection : ${err}`)}
 });
 
-async function StartServer() {
-
-    const server = new ApolloServer({  
+const init = async () => {
+    try{
+      const server = new ApolloServer({  
         schema: graphqlSchema 
     });
    
     const app = hapi.server({
-        port: 4000,
+        port: Number(process.argv[2] || 4000),
         host:'localhost'
     });
    
@@ -30,6 +29,10 @@ async function StartServer() {
     await server.installSubscriptionHandlers(app.listener);
    
     await app.start();
+    console.log(`Server started at: ${app.info.uri}`);
+    } catch (err) {
+      console.error(err.stack);
+      process.exit(1);
   }
-   
-  StartServer().catch(error => console.log(error));
+};
+init();
