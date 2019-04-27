@@ -1,45 +1,35 @@
 const hapi = require('hapi');
+
+const { ApolloServer, gql } = require('apollo-server-hapi');
+
+const graphqlSchema = require('./graphqlSchema/schema');
+
 const mongoose = require('mongoose');
 
-const Employee = require('./models/employeeSchema');
-
-const server = hapi.server({
-    host: 'localhost',
-    port: Number(process.argv[2] || 4000),
-});
 
 mongoose.connect('mongodb://localhost:27017/employeeDB', { useNewUrlParser: true }, (err) => {
     if (!err) { console.log('MongoDB Connection Succeeded for GraphQL...') }
     else { console.log(`Error in DB connection : ${err}`)}
 });
 
-const init = async () => {
+async function StartServer() {
 
-try {
-    server.route({
-        method: 'POST',
-        path: '/emp',
-        handler: async (request, h) => {
-            let employee= new Employee(request.payload); 
-            let result = await employee.save();
-            return h.response(result);
-        }
+    const server = new ApolloServer({  
+        schema: graphqlSchema 
     });
-    server.route({
-        method: 'GET',
-        path: '/emp',
-        handler: (request, h) => {
-
-            return Employee.find();
-        }
+   
+    const app = hapi.server({
+        port: 4000,
+        host:'localhost'
     });
-    await server.start();
-    
-    console.log(`Server started at: ${server.info.uri}`);
-    } catch (err) {
-        console.error(err.stack);
-         process.exit(1);
-    }
-};
-    
-init();
+   
+    await server.applyMiddleware({
+      app,
+    });
+   
+    await server.installSubscriptionHandlers(app.listener);
+   
+    await app.start();
+  }
+   
+  StartServer().catch(error => console.log(error));
