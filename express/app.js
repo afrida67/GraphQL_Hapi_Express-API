@@ -2,10 +2,9 @@ const express = require('express');
 const graphHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 
-const mySchema = require('./schema/schema');
 const graphQlResolvers = require('./resolver/index');
 
-const schema = require('./schema/schema2')
+const mySchema = require('./schema/schema')
 
 const app = express();
 
@@ -17,7 +16,7 @@ mongoose.connect('mongodb://localhost:27017/employeeDB', { useNewUrlParser: true
 });
 
 app.use('/graphql', graphHTTP({
-    schema: schema,
+    schema: mySchema,
     rootValue: graphQlResolvers,
     graphiql: true
 

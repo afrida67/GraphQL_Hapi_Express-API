@@ -1,97 +1,47 @@
-const Employee = require('../models/employeeSchema');
+'use strict';
 
-const {
-    GraphQLObjectType,
-    GraphQLString,
-    GraphQLNonNull,
-    GraphQLSchema,
-    GraphQLList,
-} = require('graphql');
+const { buildSchema } = require('graphql');
 
+module.exports = buildSchema(`
 
-const EmployeeType = new GraphQLObjectType({
-    name: 'Employee',
-    fields: () => ({
-        id: { type: GraphQLString },
-        fullName: { type: GraphQLString },
-        email: { type: GraphQLString },
-        mobile: {type: GraphQLString },
-        city: {type: GraphQLString }
-    })
-});
+type Employee {
+    _id: ID!
+    fullName: String!
+    email: String!
+    mobile: String!
+    city: String!
+}
 
-const RootQuery = new GraphQLObjectType({
-    name: 'RootQueryType',
-    fields: {
-        employee: {
-            type: EmployeeType,
-            args: { id: { type: GraphQLString } },
-            resolve(parent, args){
-                return Employee.findById(args.id);
-            }
-        },
-        employeelist: {
-            type: new GraphQLList(EmployeeType),
-            resolve(parent, args){
-                return Employee.find();
-            }
-        },
-    }
-});
+type Employee2 {
+    fullName: String!
+    email: String!
+    mobile: String!
+    city: String!
+}
+
+input EmployeeInput {
+    fullName: String!
+    email: String!
+    mobile: String!
+    city: String!
+}
+
+type RootQuery {
+  findEmployee(id: String!): Employee
+  employeeList: [Employee]
+}
 
 
-const Mutation = new GraphQLObjectType({
-    name: 'Mutation',
-    fields: {
-        addEmployee: {
-            type: EmployeeType,
-            args: {
-                fullName: { type: GraphQLString },
-                email: { type: GraphQLString },
-                mobile: {type: GraphQLString },
-                city: {type: GraphQLString }
-            },
-            resolve(parent, args){
-                let employee = new Employee({
-                    fullName: args.fullName,
-                    email: args.email,
-                    mobile: args.mobile,
-                    city: args.city
-                });
-                return employee.save();
-            }
-        },
-        deleteEmployee: {
-            type: EmployeeType,
-            args: {
-                id: { type: GraphQLString },
-            },
-            resolve(parent, args){
-               return Employee.findByIdAndDelete(args.id);
-            }
-        },
-        updateEmployee: {
-            type: EmployeeType,
-            args: {
-                id: { type: GraphQLString },
-                fullName: { type: new GraphQLNonNull(GraphQLString) },
-                email: { type: new GraphQLNonNull(GraphQLString) },
-                mobile: { type: new GraphQLNonNull(GraphQLString)},
-                city: { type: new GraphQLNonNull(GraphQLString)},
-            },
-            resolve(parent, args){
-               return Employee.findByIdAndUpdate(args.id, {
-                fullName: args.fullName,
-                email: args.email,
-                mobile: args.mobile,
-                city: args.city
-               }, {useFindAndModify: false});
-            } 
-        },
-    }
-});
-
-module.exports = new GraphQLSchema({
+type RootMutation {
+    addEmployee(employeeInput: EmployeeInput): Employee
+    deleteEmployee(id: String!): Employee
+    updateEmployee(id: String!, employeeInput: EmployeeInput): Employee
+  }
+  
+schema {
     query: RootQuery,
-    mutation: Mutation
-});
+    mutation: RootMutation
+}
+`);
+
+

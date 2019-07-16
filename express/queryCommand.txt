@@ -9,7 +9,6 @@
  }
 }
 
-
 //employee_by_id
 
 {
@@ -17,5 +16,33 @@
     city,
     fullName,
     email
+ }
+}
+
+
+mutation {
+  addEmployee(employeeInput:{ 
+    fullName:"test", 
+    email: "test@gmail.com",
+    city:"dhaak", 
+    mobile: "012222"}) {
+  fullName,
+  email
+ }
+}
+
+mutation {
+  deleteEmployee(id:"5d2e1461ff5c3d253c58eb8b") {
+    _id
+  }
+}
+
+mutation {
+  updateEmployee(id: "5cc4ada914102e0d00806cef", employeeInput:{ 
+    fullName:"test", 
+    email: "test@gmail.com",
+    mobile: "012222",
+    city:"test"}) {
+  _id
  }
 }
