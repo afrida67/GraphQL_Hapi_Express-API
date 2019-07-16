@@ -3,6 +3,9 @@ const graphHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 
 const mySchema = require('./schema/schema');
+const graphQlResolvers = require('./resolver/index');
+
+const schema = require('./schema/schema2')
 
 const app = express();
 
@@ -14,9 +17,10 @@ mongoose.connect('mongodb://localhost:27017/employeeDB', { useNewUrlParser: true
 });
 
 app.use('/graphql', graphHTTP({
-    schema: mySchema,
+    schema: schema,
+    rootValue: graphQlResolvers,
     graphiql: true
 
 }));
 
-app.listen(port, () => console.log(`GraphQL Server started on port ${port}`));
+app.listen(port, () => console.log(`Express GraphQL Server started on port ${port}`));
