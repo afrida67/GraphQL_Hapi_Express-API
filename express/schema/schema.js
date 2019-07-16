@@ -12,13 +12,6 @@ type Employee {
     city: String!
 }
 
-type Employee2 {
-    fullName: String!
-    email: String!
-    mobile: String!
-    city: String!
-}
-
 input EmployeeInput {
     fullName: String!
     email: String!

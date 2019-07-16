@@ -1,5 +1,4 @@
 'use strict';
-
 const Employee = require('../models/employeeSchema');
 
 module.exports = {
@@ -23,7 +22,6 @@ module.exports = {
     },
     addEmployee : async (args, context) => {
         try{
-           // console.log('add');
             const data = new Employee({
                 fullName: args.employeeInput.fullName,
                 email: args.employeeInput.email,
@@ -37,16 +35,17 @@ module.exports = {
         }
     },
     updateEmployee : async (args, context) => {
-        try{
-            console.log('edit');
+        try {
             const data = {
                 fullName: args.employeeInput.fullName,
                 email: args.employeeInput.email,
                 mobile: args.employeeInput.mobile,
                 city: args.employeeInput.city
             };
-            const response = await Employee.findByIdAndUpdate(args.id, data,{useFindAndModify: false});
-            console.log(response);
+            const response = await Employee.findByIdAndUpdate(args.id, data,{ useFindAndModify: false });
+            if(!response){
+                throw new Error('Key Not found');
+            }
             return response;
         } catch(err){
              throw err;
@@ -54,11 +53,9 @@ module.exports = {
     },
     deleteEmployee : async (args, context) => {
         try{
-            //console.log('delete');
             const response = await Employee.findByIdAndDelete(args.id);
             if(!response){
-                console.log('not found');
-                return response ;
+                throw new Error('Key Not found');
             }
             return response;
         } catch(err){

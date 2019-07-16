@@ -3,7 +3,6 @@ const graphHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 
 const graphQlResolvers = require('./resolver/index');
-
 const mySchema = require('./schema/schema')
 
 const app = express();
